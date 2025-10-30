@@ -1,0 +1,825 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>cravia bakes — where dreams are sweet</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ---------- variables & reset ---------- */
+    :root{
+      --pink-1:#ffd6e8;
+      --pink-2:#fff0f5;
+      --accent:#d95a82;
+      --accent-2:#c45a7a;
+      --muted:#6b3746;
+      --card: rgba(255,255,255,0.98);
+      --glass: rgba(255,255,255,0.86);
+      --gold: #d9b37a;
+      --shadow: 0 18px 45px rgba(150,70,100,0.08);
+      --dur: 480ms;
+      --easing: cubic-bezier(.2,.9,.3,1);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; 
+      font-family:"Poppins",sans-serif;
+      background: linear-gradient(180deg,var(--pink-1) 0%, #ffffff 60%);
+      color:#3b2a31; -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    /* ---------- navbar ---------- */
+    .navbar{
+      position:fixed; top:0; left:0; right:0; height:74px; z-index:999;
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      padding:10px 28px; background: linear-gradient(90deg, rgba(255,255,255,0.68), rgba(255,255,255,0.34));
+      backdrop-filter: blur(6px); box-shadow: 0 8px 28px rgba(150,80,100,0.05);
+    }
+    .brand{display:flex;align-items:center;gap:12px;cursor:pointer}
+    .brand img{width:56px;height:56px;object-fit:cover;border-radius:10px;padding:6px;background:white;box-shadow:0 10px 30px rgba(0,0,0,0.06)}
+    .brand h1{font-family:"Playfair Display",serif;font-size:18px;margin:0;color:var(--muted)}
+    nav ul{display:flex;gap:18px;align-items:center;margin:0;padding:0;list-style:none}
+    nav a{font-weight:600;color:var(--accent);padding:8px 10px;border-radius:8px;transition:background var(--dur) var(--easing)}
+    nav a.active{background:rgba(217,90,130,0.10)}
+    .menu-btn{display:none;background:none;border:none;font-size:26px;color:var(--accent);cursor:pointer}
+
+    /* ---------- main / views ---------- */
+    main{
+      padding-top:92px; 
+      position:relative; 
+      min-height:calc(100vh - 92px);
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="50" y="50" font-family="Arial, sans-serif" font-size="20" fill="rgba(255, 255, 255, 0.4)" text-anchor="middle" dominant-baseline="middle">🥐</text><text x="20" y="80" font-family="Arial, sans-serif" font-size="16" fill="rgba(255, 255, 255, 0.3)">🍰</text><text x="80" y="20" font-family="Arial, sans-serif" font-size="18" fill="rgba(255, 255, 255, 0.5)">🍩</text></svg>');
+      background-size: 100px;
+      background-repeat: repeat;
+      background-blend-mode: multiply;
+    }
+    .view{position:absolute;inset:92px 0 0 0;display:flex;justify-content:center;align-items:flex-start;padding:36px 20px;pointer-events:none;visibility:hidden;opacity:0;transform:translateY(12px)}
+    .view.visible{pointer-events:auto;visibility:visible;opacity:1;transform:none;transition:opacity var(--dur) var(--easing), transform var(--dur) var(--easing)}
+    .view-inner{max-width:1100px;width:100%}
+    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow);border:1px solid rgba(200,140,150,0.06)}
+
+    /* CSS JUDUL HALAMAN */
+    .view-inner h2 {
+      display: inline-block;
+      padding: 8px 16px;
+      background: var(--card);
+      border-radius: 8px;
+      margin-top: 0;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border: 1px solid rgba(200,140,150,0.06);
+    }
+
+    /* ---------- landing (hero replacement styles) ---------- */
+    .hero {
+      width:100%;
+      border-radius:18px;
+      padding:48px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.94));
+      box-shadow:var(--shadow);
+      border:1px solid rgba(200,140,150,0.06);
+      gap:24px;
+    }
+    .hero-left{
+      flex:1;
+      max-width:640px;
+    }
+    .hero .info-pill{display:inline-block;padding:8px 12px;background:rgba(217,90,130,0.08);color:var(--accent);border-radius:999px;font-weight:700;margin-bottom:12px}
+    .hero-title{
+      font-family:"Playfair Display",serif;font-size:44px;color:#5b2f3c;margin:6px 0;line-height:1.05;
+    }
+    .hero-sub{font-family:"Great Vibes",cursive;font-size:26px;color:#b85b79;margin:8px 0 16px}
+    .hero-desc{color:#5f4035;font-size:16px;margin-bottom:18px}
+    .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+    .btn-primary{
+      display:inline-block;padding:12px 26px;border-radius:30px;background:linear-gradient(90deg,#ff93b0,#ff6f97);color:white;font-weight:800;box-shadow:0 14px 36px rgba(255,100,140,0.14);text-decoration:none
+    }
+    .btn-secondary{
+      display:inline-block;padding:12px 26px;border-radius:30px;border:2px solid var(--accent);color:var(--accent);font-weight:700;text-decoration:none;background:transparent
+    }
+    .hero-right{
+      width:420px;flex:0 0 420px;display:flex;align-items:center;justify-content:center;
+    }
+    .hero-right img{width:100%;height:auto;border-radius:16px;box-shadow:0 18px 50px rgba(150,70,100,0.08);background:white;padding:10px}
+
+    /* ---------- about ---------- */
+    .about-grid{display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start}
+    .about-quote{font-family:"Playfair Display",serif;font-size:18px;color:#5b2f3c;font-style:italic}
+    .info-pill{display:inline-block;padding:8px 12px;background:rgba(217,90,130,0.08);color:var(--accent);border-radius:999px;font-weight:700;margin-bottom:10px}
+
+    /* ---------- katalog ---------- */
+    .menu-grid{display:grid;grid-template-columns: repeat(auto-fit,minmax(240px,1fr));gap:18px}
+    .product{border-radius:12px;overflow:hidden;background:var(--card);border:1px solid rgba(200,140,150,0.06);box-shadow:0 8px 22px rgba(120,60,80,0.04);transition:transform .28s,var(--dur)}
+    .product:hover{transform:translateY(-8px);box-shadow:0 26px 60px rgba(150,70,110,0.12)}
+    .product .media {
+      width: 100%;
+      padding-bottom: 100%;
+      height: 0;
+      background:#fff center/cover no-repeat;
+      position: relative;
+    }
+    .product .media::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: inherit;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .body{padding:12px 14px}
+    .title{font-weight:700;color:#5b2f3c;margin-bottom:6px}
+    .desc{font-size:13px;color:#6b454e;margin-bottom:8px}
+    .price-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .price{color:var(--accent);font-weight:800}
+    .old{color:#9b6b78;text-decoration:line-through;font-size:13px}
+    .badge-best{display:inline-block;background:linear-gradient(90deg,#fff6e6,#fff2df);color:var(--gold);padding:6px 10px;border-radius:999px;font-weight:800;border:1px solid rgba(217,170,120,0.18)}
+
+    /* CSS UNTUK MERAPIKAN VARIAN PREMIUM (DARI PERMINTAAN TERAKHIR) */
+    .variants-grid{
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 4 kolom desktop */
+        gap: 8px 16px;
+        margin-top: 10px;
+    }
+    .variant-item{
+        background: var(--pink-2); 
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--muted);
+    }
+
+    /* ---------- reviews ---------- */
+    .testi-wrap{margin-top:12px}
+    .testi-slider{
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 12px;
+        scroll-behavior: smooth;
+    }
+    .testi{
+        width: 100%; 
+        min-width: unset; 
+        background:var(--card);padding:14px;border-radius:12px;border:1px solid rgba(200,140,150,0.06);box-shadow:0 8px 30px rgba(150,80,100,0.04)
+    }
+    .testi-head{display:flex;align-items:center;gap:12px}
+    .avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+    .stars{color:#f5b3c6;font-weight:800}
+
+    /* ---------- contact ---------- */
+    .contact-grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+    .contact-card input,.contact-card textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(100,60,70,0.08);font-size:14px;resize:vertical}
+
+    /* ---------- float / fab ---------- */
+    .fab-top{position:fixed;right:18px;bottom:90px;width:44px;height:44px;border-radius:999px;background:linear-gradient(90deg,#fff,#fff0f5);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(150,80,120,0.08);cursor:pointer;z-index:999}
+    .fab-wa{position:fixed;right:18px;bottom:18px;width:56px;height:56px;border-radius:999px;background:linear-gradient(90deg,#25D366,#1DA851);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;box-shadow:0 12px 36px rgba(30,110,70,0.12);cursor:pointer;z-index:999}
+
+    /* ---------- footer ---------- */
+    footer{padding:30px 20px;background:linear-gradient(90deg,#ffe6ef,#fff);border-top:1px solid rgba(200,140,150,0.06);text-align:center;color:#6b3746;margin-top:36px}
+
+    /* ---------- responsive ---------- */
+    @media (max-width:980px){
+      .about-grid{grid-template-columns:1fr}
+      .contact-grid{grid-template-columns:1fr}
+      .promo-banner{flex-direction:column}
+      .brand h1{display:none}
+      .hero-title{font-size:32px}
+      .hero-sub{font-size:20px}
+      .view{inset:92px 0 0 0;padding:18px}
+      .variants-grid {
+          grid-template-columns: repeat(3, 1fr); /* 3 kolom untuk tablet */
+      }
+    }
+    @media (max-width:760px){
+      nav ul{display:none}
+      .menu-btn{display:block}
+      .hero-title{font-size:32px}
+      .hero-sub{font-size:20px}
+      .view{inset:92px 0 0 0;padding:18px}
+    }
+    @media (max-width:600px) {
+        .variants-grid {
+            grid-template-columns: repeat(2, 1fr); /* 2 kolom untuk ponsel */
+        }
+    }
+    /* focus outline for keyboard */
+    :focus{outline:3px solid rgba(217,90,130,0.14);outline-offset:2px}
+  </style>
+</head>
+<body>
+
+  <header class="navbar" role="banner">
+    <div class="brand" id="brand">
+      <img src="logo.jpeg" alt="Cravia logo"> 
+      <h1>Cravia Bakes</h1>
+    </div>
+
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="#" data-target="welcome" class="nav-link active">Home</a></li>
+        <li><a href="#" data-target="about" class="nav-link">About Us</a></li>
+        <li><a href="#" data-target="menu" class="nav-link">Menu</a></li>
+        <li><a href="#" data-target="promo" class="nav-link">Promo & Info</a></li>
+        <li><a href="#" data-target="review" class="nav-link">Reviews</a></li>
+        <li><a href="#" data-target="contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+
+    <button class="menu-btn" id="menu-btn" aria-label="Buka menu">☰</button>
+  </header>
+
+  <nav id="mobile-nav" style="position:fixed;top:74px;right:-320px;width:260px;height:calc(100% - 74px);background:linear-gradient(180deg,#fff,#fff0f5);box-shadow:-8px 20px 50px rgba(150,80,120,0.06);padding:16px;transition:right .32s;z-index:998;">
+    <div style="text-align:right"><button id="mobile-close" style="background:none;border:none;font-size:22px;color:var(--accent)">✕</button></div>
+    <a href="#" data-target="welcome" class="mobile-link" style="display:block;padding:12px 8px;font-weight:700;color:var(--accent)">Home</a>
+    <a href="#" data-target="about" class="mobile-link" style="display:block;padding:12px 8px;font-weight:700;color:var(--accent)">About Us</a>
+    <a href="#" data-target="menu" class="mobile-link" style="display:block;padding:12px 8px;font-weight:700;color:var(--accent)">Menu</a>
+    <a href="#" data-target="promo" class="mobile-link" style="display:block;padding:12px 8px;font-weight:700;color:var(--accent)">Promo & Info</a>
+    <a href="#" data-target="review" class="mobile-link" style="display:block;padding:12px 8px;font-weight:700;color:var(--accent)">Reviews</a>
+    <a href="#" data-target="contact" class="mobile-link" style="display:block;padding:12px 8px;font-weight:700;color:var(--accent)">Contact</a>
+  </nav>
+
+  <main>
+    <section id="welcome" class="view visible" role="region" aria-labelledby="welcome-title">
+      <div class="view-inner">
+        <div class="hero">
+          <div class="hero-left">
+            <div class="info-pill">Selamat Datang</div>
+            <h2 class="hero-title" id="welcome-title">Make Your Day Sweeter with <span>Cravia Bakes</span></h2>
+            <div class="hero-sub">Where dreams are sweet — nikmati momen manismu bersama kami.</div>
+            <p class="hero-desc">Nikmati setiap gigitan lembut dengan rasa cinta dari Cravia Bakes. Roti dan kue kami dibuat dengan bahan terbaik dan penuh kehangatan — sempurna untuk momen spesial maupun hari-hari biasa.</p>
+
+            <div class="hero-cta" style="margin-top:10px">
+              <a id="explore-btn" class="btn-primary" href="#" role="button">Explore Now</a>
+              <a class="btn-secondary" href="#contact" role="button" onclick="showView('contact'); return false;">Contact Us</a>
+            </div>
+          </div>
+
+          <div class="hero-right">
+            <img src="logo.jpeg" alt="Cravia - hero visual" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="view hidden" role="region" aria-labelledby="about-title">
+      <div class="view-inner">
+        <h2 id="about-title">Tentang Cravia — Filosofi & Perjalanan Kami</h2>
+        <div class="about-grid">
+          <div>
+            <div class="card" style="padding:18px;">
+              <div class="info-pill">Cerita Kami</div>
+              <p class="about-quote">Cravia berdiri pada tahun 2018 — berawal dari dapur kecil dengan impian sederhana: menghadirkan kebahagiaan lewat sepotong kue.</p>
+
+              <p style="margin-top:10px">Dari resep keluarga yang diwariskan turun-temurun, kami belajar bahwa rahasia rasa bukan hanya pada bahan — melainkan pada ketulusan dalam proses. Di Cravia, kami tidak sekadar memanggang adonan; kami menenun cerita. Setiap lapisan adalah perpaduan bahan terbaik, tangan terampil, dan semangat mencipta karya yang menyentuh hati.</p>
+
+              <p style="margin-top:10px">Kami memadukan teknik tradisional dengan sentuhan modern untuk menghasilkan produk yang tidak hanya lezat, tetapi juga artistik dan berkelas. Keindahan rasa sering kali lahir dari kesederhanaan bahan dan niat yang tulus. Itu sebabnya setiap produk Cravia melewati uji rasa berkali-kali — agar setiap gigitan meninggalkan kesan yang tak terlupakan.</p>
+
+              <p style="margin-top:10px">Perjalanan kami juga tentang pertumbuhan: dari satu dapur rumahan, Cravia kini telah berkembang menjadi jaringan yang lebih luas. Saat ini Cravia memiliki <strong>20 cabang</strong> tersebar di seluruh Indonesia — mayoritas berada di <strong>Pulau Jawa</strong>. Kami bangga dapat memperluas jangkauan tanpa mengorbankan standar kualitas dan rasa.</p>
+
+              <p style="margin-top:10px">Saat ini Cravia menghadirkan lebih dari <strong>35 varian</strong> roti dan kue — mulai dari klasik yang akrab di lidah hingga kreasi pastry modern. Di bagian katalog, kamu akan menemukan <strong>10 produk best seller</strong> yang menjadi favorit pelanggan — pilihan yang paling sering dibeli oleh pelanggan setia kami.</p>
+
+              <p style="margin-top:10px"><em>Bahagia adalah ketika aroma kue yang baru matang memenuhi ruangan.</em></p>
+            </div>
+
+            <div style="margin-top:14px" class="card">
+              <div class="info-pill">Nilai & Komitmen</div>
+              <ul style="margin:8px 0 0 18px">
+                <li><strong>Kejujuran</strong> dalam memilih bahan.</li>
+                <li><strong>Kualitas</strong> — tanpa pengawet, olahan segar setiap hari.</li>
+                <li><strong>Pelayanan</strong> yang hangat dan cepat.</li>
+                <li><strong>Inovasi</strong> — terus bereksperimen dengan kreasi baru tanpa meninggalkan akar.</li>
+              </ul>
+            </div>
+          </div>
+
+          <aside>
+            <div class="card">
+              <h4 style="margin-top:0">Informasi Singkat</h4>
+              <p style="margin:6px 0"><strong>Didirikan</strong><br>2018</p>
+              <p style="margin:6px 0"><strong>Cabang</strong><br>20 cabang di seluruh Indonesia (mayoritas di Pulau Jawa)</p>
+              <p style="margin:6px 0"><strong>Varian</strong><br>35+ varian cake & pastry</p>
+              <p style="margin:6px 0"><strong>Kontak</strong><br>**0858-0283-9939** • hello@craviabakes.com</p>
+            </div>
+
+            <div style="margin-top:12px" class="card">
+              <h4 style="margin-top:0">Visi & Misi</h4>
+              <p style="margin:6px 0"><strong>Visi:</strong> Menjadi merek kue lokal yang membawa kebahagiaan di setiap rumah.</p>
+              <p style="margin:6px 0"><strong>Misi:</strong></p>
+              <ol style="margin:0 0 0 18px">
+                <li>Menghadirkan produk berkualitas tinggi dan cita rasa autentik.</li>
+                <li>Menjadi wadah kreativitas dalam dunia pastry Indonesia.</li>
+                <li>Berkontribusi positif bagi masyarakat melalui usaha yang berkelanjutan.</li>
+              </ol>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="menu" class="view hidden" role="region" aria-labelledby="menu-title">
+      <div class="view-inner">
+        <h2 id="menu-title">Katalog & Best Seller</h2>
+        <p class="muted">10 produk best seller — foto, deskripsi singkat, harga normal & promo.</p>
+
+        <div class="menu-grid" style="margin-top:14px">
+          <article class="product">
+            <div class="media" style="background-image:url('satu.jpeg');"></div>
+            <div class="body">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="title">Wedding Cake “Eternal Bloom”</div>
+                <div class="badge-best">BEST SELLER</div>
+              </div>
+              <div class="desc">Kue pernikahan klasik dengan sentuhan bunga segar dan buttercream halus.</div>
+              <div class="price-row"><div class="price">Rp 1.800.000</div><div class="old">Rp 1.800.000</div></div>
+              <div style="margin-top:8px;color:var(--accent);font-weight:800">Promo: Rp 1.550.000</div>
+            </div>
+          </article>
+
+          <article class="product">
+            <div class="media" style="background-image:url('dua.jpeg');"></div>
+            <div class="body">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="title">White Tart “Snow Velvet”</div>
+                <div class="badge-best">BEST SELLER</div>
+              </div>
+              <div class="desc">Perpaduan krim vanila, keju halus, dan kelapa kering yang harum.</div>
+              <div class="price-row"><div class="price">Rp 250.000</div><div class="old">Rp 250.000</div></div>
+              <div style="margin-top:8px;color:var(--accent);font-weight:800">Promo: Rp 199.000</div>
+            </div>
+          </article>
+
+          <article class="product">
+            <div class="media" style="background-image:url('tiga.jpeg');"></div>
+            <div class="body">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="title">Donut “Sweet Ring”</div>
+                <div class="badge-best">BEST SELLER</div>
+              </div>
+              <div class="desc">Donat empuk berbalut glaze pastel dengan choco chips & almond slice.</div>
+              <div class="price-row"><div class="price">Rp 12.000 / pcs</div><div class="old">Rp 12.000</div></div>
+              <div style="margin-top:8px;color:var(--accent);font-weight:800">Promo: Rp 9.000 / pcs</div>
+            </div>
+          </article>
+
+          <article class="product">
+            <div class="media" style="background-image:url('empat.jpeg');"></div>
+            <div class="body">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="title">Cupcake “Blossom Bite”</div>
+                <div class="badge-best">BEST SELLER</div>
+              </div>
+              <div class="desc">Cupcake lembut dengan buttercream floral dan stroberi segar.</div>
+              <div class="price-row"><div class="price">Rp 20.000 / pcs</div></div>
+              <div style="margin-top:8px;color:var(--accent);font-weight:800">Promo: Rp 16.000 / pcs</div>
+            </div>
+          </article>
+
+          <article class="product">
+            <div class="media" style="background-image:url('lima.jpeg');"></div>
+            <div class="body">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="title">Chocolate Fudge Cake “Dark Bliss”</div>
+                <div class="badge-best">BEST SELLER</div>
+              </div>
+              <div class="desc">Kue cokelat lembap dengan lapisan ganache tebal yang lumer.</div>
+              <div class="price-row"><div class="price">Rp 350.000</div></div>
+              <div style="margin-top:8px;color:var(--accent);font-weight:800">Promo: Rp 299.000</div>
+            </div>
+          </article>
+
+          <article class="product">
+            <div class="media" style="background-image:url('enam.jpeg');"></div>
+            <div class="body">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="title">Cheesecake “Golden Crust”</div>
+                <div class="badge-best">BEST SELLER</div>
+              </div>
+              <div class="desc">Cheesecake dengan dasar biskuit renyah dan topping keju creamy berpadu lemon.</div>
+              <div class="price-row"><div class="price">Rp 320.000</div></div>
+              <div style="margin-top:8px;color:var(--accent);font-weight:800">Promo: Rp 275.000</div>
+            </div>
+          </article>
+
+          <article class="product">
+            <div class="media" style="background-image:url('tujuh.jpeg');"></div>
+            <div class="body">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="title">Macaron “Paris Dream”</div>
+                <div class="badge-best">BEST SELLER</div>
+              </div>
+              <div class="desc">Macaron pastel dengan isian raspberry, pistachio & salted caramel.</div>
+              <div class="price-row"><div class="price">Rp 85.000 / box</div></div>
+              <div style="margin-top:8px;color:var(--accent);font-weight:800">Promo: Rp 69.000 / box</div>
+            </div>
+          </article>
+
+          <article class="product">
+            <div class="media" style="background-image:url('delapan.jpeg');"></div>
+            <div class="body">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="title">Roll Cake “Velvet Swirl”</div>
+                <div class="badge-best">BEST SELLER</div>
+              </div>
+              <div class="desc">Kue gulung lembut berisi krim keju dan selai berry.</div>
+              <div class="price-row"><div class="price">Rp 120.000</div></div>
+              <div style="margin-top:8px;color:var(--accent);font-weight:800">Promo: Rp 95.000</div>
+            </div>
+          </article>
+
+          <article class="product">
+            <div class="media" style="background-image:url('sembilan.jpeg');"></div>
+            <div class="body">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="title">Brownies “Choco Melt”</div>
+                <div class="badge-best">BEST SELLER</div>
+              </div>
+              <div class="desc">Brownies fudgy dengan potongan dark chocolate premium dan kacang kenari.</div>
+              <div class="price-row"><div class="price">Rp 150.000</div></div>
+              <div style="margin-top:8px;color:var(--accent);font-weight:800">Promo: Rp 119.000</div>
+            </div>
+          </article>
+
+          <article class="product">
+            <div class="media" style="background-image:url('sepuluh.jpeg');"></div>
+            <div class="body">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="title">Cookies “Butter Bliss”</div>
+                <div class="badge-best">BEST SELLER</div>
+              </div>
+              <div class="desc">Kue kering klasik dengan aroma butter kuat dan tekstur renyah di luar, lembut di dalam.</div>
+              <div class="price-row"><div class="price">Rp 95.000 / jar</div></div>
+              <div style="margin-top:8px;color:var(--accent);font-weight:800">Promo: Rp 79.000 / jar</div>
+            </div>
+          </article>
+        </div>
+
+        <div class="variants" aria-label="Varian Premium Lainnya">
+          <h3 style="margin-top:18px;margin-bottom:8px">Varian Premium Lainnya</h3>
+          <div class="variants-grid">
+            <div class="variant-item">Chocolate Truffle Brioche</div>
+            <div class="variant-item">Pistachio Danish</div>
+            <div class="variant-item">Mango Cream Puff</div>
+            <div class="variant-item">Salted Caramel Éclair</div>
+
+            <div class="variant-item">Black Forest Tartlet</div>
+            <div class="variant-item">Matcha Red Bean Croissant</div>
+            <div class="variant-item">Strawberry Cheesecake Tart</div>
+            <div class="variant-item">Pain au Chocolat Royale</div>
+
+            <div class="variant-item">Apple Cinnamon Danish</div>
+            <div class="variant-item">Raspberry Almond Tart</div>
+            <div class="variant-item">Blueberry Cream Cheese Danish</div>
+            <div class="variant-item">Tiramisu Croissant</div>
+
+            <div class="variant-item">Chocolate Ganache Roll</div>
+            <div class="variant-item">Pandan Coconut Brioche</div>
+            <div class="variant-item">Caramel Pecan Danish</div>
+            <div class="variant-item">Mini Opera Cake</div>
+
+            <div class="variant-item">Coffee Walnut Loaf</div>
+            <div class="variant-item">Ube Custard Bun</div>
+            <div class="variant-item">Chocolate Almond Tart</div>
+            <div class="variant-item">Lemon Meringue Puff</div>
+
+            <div class="variant-item">Cheese Soufflé Croissant</div>
+            <div class="variant-item">Mocha Chocolate Roll</div>
+            <div class="variant-item">Salted Butter Kouign-Amann</div>
+            <div class="variant-item">Banana Caramel Brioche</div>
+
+            <div class="variant-item">Matcha White Chocolate Tart</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="promo" class="view hidden" role="region" aria-labelledby="promo-title">
+      <div class="view-inner">
+        <h2 id="promo-title">Promo & Info</h2>
+        <div class="promo-banner" style="margin-top:12px">
+          <div class="left card">
+            <div style="font-weight:700;font-size:18px;color:#5b2f3c">✨ Promo Akhir Bulan Cravia Bakes ✨</div>
+            <p class="muted" style="margin:8px 0 0">Nikmati diskon 20% untuk banyak produk pilihan setiap tanggal <strong>25–30</strong> setiap bulan. S&K berlaku.</p>
+            <div class="rules" style="margin-top:12px">
+              <ol>
+                <li>Berlaku tanggal 25–30 setiap bulan, di semua cabang & pemesanan online.</li>
+                <li>Tidak berlaku untuk Wedding Cake dan paket hampers (custom order).</li>
+                <li>Diskon 20% otomatis saat checkout (tanpa kode).</li>
+                <li>Minimal pembelian Rp100.000.</li>
+                <li>Tidak dapat digabungkan dengan promo lain. Stok terbatas.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="right card">
+            <div style="font-weight:700">Alamat & Kontak Resmi</div>
+            <div class="muted contact-list" style="margin-top:8px">
+              <div><strong>Cabang Utama:</strong><br>Jl. Melati No. 12, Kebayoran Baru, Jakarta Selatan 12170</div>
+              <div style="margin-top:8px"><strong>Jam:</strong><br>Sen–Jum 08.00–20.00 • Sab–Min 09.00–21.00</div>
+              <div style="margin-top:8px">**WA:** **0858-0283-9939**</div>
+              <div style="margin-top:8px"><strong>Email:</strong> hello@craviabakes.com</div>
+              <div style="margin-top:8px"><strong>IG:</strong> @cravia.bakes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="review" class="view hidden" role="region" aria-labelledby="review-title">
+      <div class="view-inner">
+        <h2 id="review-title">Review Pelanggan</h2>
+        <p class="muted">Rating 4.9 / 5 (dari ratusan ulasan)</p>
+
+        <div class="testi-wrap">
+          <div id="testi" class="testi-slider"> 
+            <div class="testi">
+              <div class="testi-head">
+                
+                <div style="font-weight:700">Amel — Jakarta</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★★</div>
+              <p style="margin-top:6px">Cheesecake-nya lembut banget! Rasanya rich tapi nggak bikin enek. Plus, packaging-nya elegan banget.</p>
+            </div>
+
+            <div class="testi">
+              <div class="testi-head">
+                
+                <div style="font-weight:700">Nasha — Depok</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★★</div>
+              <p style="margin-top:6px">Cravia tuh definisi aesthetic and delicious. Roti red velvet-nya jadi favorit keluarga. Pelayanannya juga super ramah!</p>
+            </div>
+
+            <div class="testi">
+              <div class="testi-head">
+               
+                <div style="font-weight:700">Tania — Bekasi</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★☆</div>
+              <p style="margin-top:6px">Pesan croissant isi almond — flaky, buttery, dan harum banget! Cuma pengiriman agak lama pas weekend.</p>
+            </div>
+
+            <div class="testi">
+              <div class="testi-head">
+                
+                <div style="font-weight:700">Rafi — Tangerang</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★★</div>
+              <p style="margin-top:6px">Promo akhir bulan bikin ketagihan — bisa borong cake favorit dengan harga miring!</p>
+            </div>
+
+            <div class="testi">
+              <div class="testi-head">
+               
+                <div style="font-weight:700">Sinta — Jakarta Selatan</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★★</div>
+              <p style="margin-top:6px">Kue ulang tahunnya cantik banget, persis kayak foto referensi! Tekstur sponge-nya halus dan fresh banget.</p>
+            </div>
+
+            <div class="testi">
+              <div class="testi-head">
+               
+                <div style="font-weight:700">Lia — Bandung</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★☆</div>
+              <p style="margin-top:6px">Pesan via WA super cepat direspon. Cake sampai dalam kondisi sempurna. Good job Cravia team!</p>
+            </div>
+
+            <div class="testi">
+              <div class="testi-head">
+               
+                <div style="font-weight:700">Adel — Jakarta Barat</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★★</div>
+              <p style="margin-top:6px">Aku suka konsepnya yang soft pink dan elegan. Setiap produknya kayak karya seni — cantik banget difoto!</p>
+            </div>
+
+            <div class="testi">
+              <div class="testi-head">
+                
+                <div style="font-weight:700">Fira — Bogor</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★★</div>
+              <p style="margin-top:6px">Beli pastry box buat kantor, semua rekan kerja suka! Katanya 'ini roti terenak yang pernah dikirim'.</p>
+            </div>
+
+            <div class="testi">
+              <div class="testi-head">
+                
+                <div style="font-weight:700">Kevin — Bogor</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★☆</div>
+              <p style="margin-top:6px">Kue-nya enak banget, tapi tempat parkirnya agak sempit. Sisanya 10/10! Pasti balik lagi.</p>
+            </div>
+
+            <div class="testi">
+              <div class="testi-head">
+                
+                <div style="font-weight:700">Dewi — Surabaya</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★★</div>
+              <p style="margin-top:6px">Beli via online, pengiriman cepat, dan kuenya tetap mulus sampai rumah. Worth every penny!</p>
+            </div>
+
+            <div class="testi">
+              <div class="testi-head">
+                <div style="font-weight:700">Hana — Jakarta Barat</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★★</div>
+              <p style="margin-top:6px">Awalnya coba 1 box cookies, eh jadi langganan tiap bulan. Ga terlalu manis, pas banget buat oleh-oleh.</p>
+            </div>
+
+            <div class="testi">
+              <div class="testi-head">
+                
+                <div style="font-weight:700">Bima — Semarang</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★★</div>
+              <p style="margin-top:6px">Roti brioche-nya lembut dan enak. Cocok banget buat sarapan kantor. Packaging rapi.</p>
+            </div>
+
+            <div class="testi">
+              <div class="testi-head">
+                
+                <div style="font-weight:700">Maya — Yogyakarta</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★☆</div>
+              <p style="margin-top:6px">Rasa oke, presentasi cantik. Hanya berharap varian matcha lebih banyak pilihan.</p>
+            </div>
+
+            <div class="testi">
+              <div class="testi-head">
+               
+                <div style="font-weight:700">Anton — Bandung</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★★</div>
+              <p style="margin-top:6px">Pesan cake kantor untuk event, semuanya habis. Tastenya balance dan tampilannya profesional.</p>
+            </div>
+
+            <div class="testi">
+              <div class="testi-head">
+                
+                <div style="font-weight:700">Rina — Surabaya</div>
+              </div>
+              <div class="stars" style="margin-top:8px">★★★★★</div>
+              <p style="margin-top:6px">Suka banget sama macarons-nya — warna pastel dan rasanya lembut. Cocok buat hampers eksklusif.</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="view hidden" role="region" aria-labelledby="contact-title">
+      <div class="view-inner">
+        <h2 id="contact-title">Kontak</h2>
+        <div class="contact-grid" style="margin-top:12px">
+          <form class="contact-card card" id="contact-form" onsubmit="return handleContact(event)">
+            <label for="name">Nama</label>
+            <input id="name" name="name" placeholder="Nama lengkap" required>
+            <label for="email" style="margin-top:8px">Email / WhatsApp</label>
+            <input id="email" name="email" placeholder="Email atau nomor WA" required>
+            <label for="message" style="margin-top:8px">Pesan</label>
+            <textarea id="message" name="message" rows="5" placeholder="Saya ingin memesan..." required></textarea>
+            <button type="submit" class="enter-btn" style="margin-top:10px">Kirim Pesan</button>
+          </form>
+
+          <aside class="card" style="padding:16px">
+            <h4 style="margin-top:0">Alamat & Media Sosial</h4>
+            <p style="margin:6px 0"><strong>Alamat</strong><br>Jl. Melati No. 12, Kebayoran Baru, Jakarta Selatan 12170</p>
+            <p style="margin:6px 0"><strong>Telepon / WA</strong><br>**0858-0283-9939**</p>
+            <p style="margin:6px 0"><strong>Email</strong><br>hello@craviabakes.com</p>
+            <p style="margin:6px 0"><strong>Instagram</strong><br>@cravia.bakes</p>
+            <div style="margin-top:12px" class="center">
+              <a href="https://wa.me/6285802839939" target="_blank" rel="noopener" class="enter-btn">Pesan via WhatsApp</a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="fab-top" class="fab-top" title="Ke atas">↑</div>
+  <a class="fab-wa" title="Chat via WhatsApp" href="https://wa.me/6285802839939" target="_blank" rel="noopener">WA</a>
+
+  <footer>
+    <div style="max-width:1100px;margin:0 auto;padding:0 20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:12px">
+          <img src="images/logo.jpg" alt="logo small" style="width:48px;height:48px;object-fit:cover;border-radius:8px" onerror="this.style.display='none'">
+          <div>
+            <div style="font-weight:700">Cravia Bakes</div>
+            <div style="font-size:13px;color:#8b4859">Where dreams are sweet</div>
+          </div>
+        </div>
+
+        <div style="font-size:14px;color:#8b4859">© 2025 Cravia Bakes. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Views & navigation
+    const views = Array.from(document.querySelectorAll('.view'));
+    const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+    const mobileLinks = Array.from(document.querySelectorAll('.mobile-link'));
+    const brand = document.getElementById('brand');
+
+    function showView(id){
+      views.forEach(v=>{
+        if(v.id === id){
+          v.classList.add('visible'); v.classList.remove('hidden');
+          // inner entrance effect
+          const inner = v.querySelector('.view-inner');
+          if(inner){ inner.style.opacity=0; inner.style.transform='translateY(8px)'; setTimeout(()=>{ inner.style.transition='opacity 420ms var(--easing), transform 420ms var(--easing)'; inner.style.opacity=1; inner.style.transform='none'; },30); }
+        } else {
+          v.classList.remove('visible'); v.classList.add('hidden');
+        }
+      });
+      // update nav active
+      navLinks.forEach(a=> a.classList.toggle('active', a.dataset.target===id));
+    }
+
+    // PERBAIKAN: Menghubungkan klik navigasi atas ke fungsi showView
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault(); 
+        const targetId = link.dataset.target;
+        showView(targetId);
+      });
+    });
+    
+    // Hero explore -> diubah ke about (Tentang Kami)
+    const exploreBtn = document.getElementById('explore-btn');
+    if(exploreBtn){
+      exploreBtn.addEventListener('click', (e)=>{
+        e.preventDefault();
+        showView('about'); // buka Tentang Kami saat klik Explore Now
+        navLinks.forEach(a=> a.classList.toggle('active', a.dataset.target==='about'));
+      });
+    }
+
+    // Brand click => welcome
+    brand.addEventListener('click', ()=> {
+      showView('welcome');
+      navLinks.forEach(a=> a.classList.toggle('active', a.dataset.target==='welcome'));
+    });
+
+    // Mobile nav toggles (Menu Hamburger)
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    const mobileClose = document.getElementById('mobile-close');
+    menuBtn && menuBtn.addEventListener('click', ()=> {
+      mobileNav.style.right = (mobileNav.style.right === '0px') ? '-320px' : '0px';
+    });
+    mobileClose && mobileClose.addEventListener('click', ()=> mobileNav.style.right='-320px');
+    mobileLinks.forEach(l => l.addEventListener('click', (e)=> {
+      e.preventDefault();
+      const tgt = l.dataset.target;
+      showView(tgt);
+      mobileNav.style.right='-320px';
+    }));
+
+    // Ensure only landing visible on load
+    window.addEventListener('load', ()=> {
+      showView('welcome');
+      const anim = document.getElementById('welcome-anim');
+      if(anim){ anim.style.opacity=0; anim.style.transform='translateY(12px)'; setTimeout(()=>{ anim.style.transition='opacity 700ms ease, transform 700ms ease'; anim.style.opacity=1; anim.style.transform='none'; },120); }
+    });
+
+    // Contact form demo
+    function handleContact(e){
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+      if(!name || !email || !message) return alert('Isi semua kolom ya 😊');
+      alert('Terima kasih ' + name + '! Pesanmu telah dikirim (demo). Kami akan menghubungi segera.');
+      e.target.reset();
+      return false;
+    }
+
+    // Top fab
+    document.getElementById('fab-top').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+    // Accessibility: show focus outlines on keyboard tab
+    document.addEventListener('keyup', function(e){ if(e.key === 'Tab') document.body.classList.add('show-focus'); });
+
+  </script>
+</body>
+</html>
